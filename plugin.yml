@@ -1,0 +1,7 @@
+name: 29UltraPortals
+main: dev.cromo29.ultraportals.UltraPortalsPlugin
+version: 2.0
+author: Cromo29
+
+depend:
+  - DurkCore
