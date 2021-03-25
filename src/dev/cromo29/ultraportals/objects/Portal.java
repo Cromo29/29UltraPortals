@@ -43,19 +43,19 @@ public class Portal {
         double tau = 6.283185307179586D / particles;
 
         for (double index = 0; index < particles; ++index) {
-            double radians = index * tau;
+            double point = index * tau;
 
-            Vector fixedVector = location.getDirection().clone().multiply(Math.cos(radians) * radius);
-            fixedVector.setY(Math.sin(radians) * radius);
+            Vector vector = location.getDirection().clone().multiply(Math.cos(point) * radius);
+            vector.setY(Math.sin(point) * radius);
 
-            VectorUtil.rotateAroundAxisY(fixedVector, Math.toRadians(90));
-            clonedLocation.add(fixedVector);
+            VectorUtil.rotateAroundAxisY(vector, Math.toRadians(90));
+            clonedLocation.add(vector);
 
             if (index % 13 == 0 && particlePoints.size() < 4)
                 this.particlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
 
             this.circlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
-            clonedLocation.subtract(fixedVector);
+            clonedLocation.subtract(vector);
         }
     }
 
