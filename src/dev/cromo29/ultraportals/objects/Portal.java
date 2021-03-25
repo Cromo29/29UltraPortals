@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Portal {
 
     private Location location, direction;
-    private List<Location> circles, particles;
+    private List<Location> circlePoints, particlePoints;
     private Color color;
 
     private ArmorStand armorStand;
@@ -24,11 +24,11 @@ public class Portal {
     public Portal(Location location, Location direction, Color color) {
         this.color = color;
         this.direction = direction;
-        this.circles = new ArrayList<>();
-        this.particles = new ArrayList<>();
+        this.circlePoints = new ArrayList<>();
+        this.particlePoints = new ArrayList<>();
 
         double radius = 2.25;
-        double amount = radius * 35;
+        double particles = radius * 35;
 
         Location portalLocation = location.clone();
 
@@ -40,21 +40,21 @@ public class Portal {
         portalLocation.setDirection(center.getDirection().multiply(-0.1).normalize());
         this.location = portalLocation;
 
-        double tau = 6.283185307179586D / amount;
+        double tau = 6.283185307179586D / particles;
 
-        for (double index = 0; index < amount; ++index) { // Gerando o raio
-            double angle = index * tau; // Obtendo o angulo
+        for (double index = 0; index < particles; ++index) {
+            double radians = index * tau;
 
-            Vector fixedVector = location.getDirection().clone().multiply(Math.cos(angle) * radius);
-            fixedVector.setY(Math.sin(angle) * radius);
+            Vector fixedVector = location.getDirection().clone().multiply(Math.cos(radians) * radius);
+            fixedVector.setY(Math.sin(radians) * radius);
 
             VectorUtil.rotateAroundAxisY(fixedVector, Math.toRadians(90));
             clonedLocation.add(fixedVector);
 
-            if (index % 13 == 0 && particles.size() < 4)
-                this.particles.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
+            if (index % 13 == 0 && particlePoints.size() < 4)
+                this.particlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
 
-            this.circles.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
+            this.circlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
             clonedLocation.subtract(fixedVector);
         }
     }
@@ -68,11 +68,11 @@ public class Portal {
     }
 
     public List<Location> getCircle() {
-        return circles;
+        return circlePoints;
     }
 
-    public List<Location> getParticles() {
-        return particles;
+    public List<Location> getParticlePoints() {
+        return particlePoints;
     }
 
     public void update(boolean enabled) {
@@ -85,11 +85,11 @@ public class Portal {
 
         if (!hasPlayer.get()) return;
 
-        circles.forEach(loc -> ParticleMaker.sendParticle(ParticleEffect.REDSTONE, loc, enabled ? color : Color.fromRGB(255, 153, 0), 1, true));
+        circlePoints.forEach(loc -> ParticleMaker.sendParticle(ParticleEffect.REDSTONE, loc, enabled ? color : Color.fromRGB(255, 153, 0), 1, true));
 
         if (!enabled) return;
 
-        particles.forEach(loc -> {
+        particlePoints.forEach(loc -> {
             Vector vector = location.toVector().subtract(loc.toVector());
 
             ParticleMaker.sendParticle(ParticleEffect.FIREWORKS_SPARK, loc.clone().add(0, 0.1, 0), vector, 0.1F, 50);
