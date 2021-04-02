@@ -88,6 +88,8 @@ public class UsePortalEvent implements Listener {
 
         if (!compareLocation(blockedLocation, location)) return true;
 
+        if (!plugin.getPortalManager().compareWorld(blockedLocation, player.getLocation())) return false;
+
         if (blockedLocation.distance(player.getLocation()) > 2.9) {
             portalLink.getBlockeds().remove(player);
             return true;

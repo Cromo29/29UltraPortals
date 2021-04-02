@@ -103,10 +103,15 @@ public class PortalLink {
     public void deleteAsync() {
         UltraPortalsPlugin plugin = UltraPortalsPlugin.get();
 
+        boolean everything = plugin.getPortalGson().getSection("portals")
+                .size() <= 1;
+
         TXT.runAsynchronously(plugin, () -> {
             plugin.getPortalsMap().remove(portalName.toLowerCase());
 
-            plugin.getPortalGson().removeAll("portals." + portalName.toLowerCase());
+            if (everything) plugin.getPortalGson().removeAll("portals");
+            else plugin.getPortalGson().remove("portals." + portalName.toLowerCase());
+
             plugin.getPortalGson().save();
         });
     }

@@ -1,22 +1,28 @@
 package dev.cromo29.ultraportals.objects;
 
 import dev.cromo29.durkcore.SpecificUtils.VectorUtil;
+import dev.cromo29.durkcore.Util.MakeItem;
 import dev.cromo29.durkcore.Util.ParticleEffect;
 import dev.cromo29.durkcore.Util.ParticleMaker;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Portal {
 
     private Location location, direction;
     private List<Location> circlePoints, particlePoints;
+    private Map<ArmorStand, Integer> stands;
     private Color color;
 
     private ArmorStand armorStand;
@@ -26,6 +32,7 @@ public class Portal {
         this.direction = direction;
         this.circlePoints = new ArrayList<>();
         this.particlePoints = new ArrayList<>();
+        this.stands = new HashMap<>();
 
         double radius = 2.25;
         double particles = radius * 35;
@@ -42,7 +49,7 @@ public class Portal {
 
         double tau = 6.283185307179586D / particles;
 
-        for (double index = 0; index < particles; ++index) {
+        for (int index = 0; index < particles; ++index) {
             double point = index * tau;
 
             Vector vector = location.getDirection().clone().multiply(Math.cos(point) * radius);
@@ -53,6 +60,19 @@ public class Portal {
 
             if (index % 13 == 0 && particlePoints.size() < 4)
                 this.particlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
+
+            if (index % (particles / 9) == 0) {
+                Location standLoc = new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ());
+
+                ArmorStand armorStand = standLoc.getWorld().spawn(standLoc.clone().subtract(0, 0.5, 0), ArmorStand.class);
+                armorStand.setSmall(true);
+                armorStand.setArms(false);
+                armorStand.setVisible(false);
+                armorStand.setRightArmPose(new EulerAngle(0, 0, Math.toRadians(323)));
+                armorStand.setItemInHand(new MakeItem(Material.WOOL).setData(10).build());
+
+                stands.put(armorStand, index);
+            }
 
             this.circlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
             clonedLocation.subtract(vector);
@@ -89,13 +109,25 @@ public class Portal {
 
         if (!enabled) return;
 
-        particlePoints.forEach(loc -> {
+        stands.keySet().forEach(armorStand -> {
+
+            int current = stands.get(armorStand);
+            Location loc = circlePoints.get(current);
+
+            Vector vector = location.toVector().subtract(loc.toVector());
+            armorStand.teleport(loc.clone().add(vector.multiply(2.5)).subtract(0.0, 0.5, 0.0));
+
+            if (current >= circlePoints.size() - 1) stands.put(armorStand, 0);
+            else stands.put(armorStand, current + 1);
+        });
+
+     /*   particlePoints.forEach(loc -> {
             Vector vector = location.toVector().subtract(loc.toVector());
 
             ParticleMaker.sendParticle(ParticleEffect.FIREWORKS_SPARK, loc.clone().add(0, 0.1, 0), vector, 0.1F, 50);
         });
 
-        ParticleMaker.sendParticle(ParticleEffect.FIREWORKS_SPARK, location, 0.1F, 1, 50);
+        ParticleMaker.sendParticle(ParticleEffect.FIREWORKS_SPARK, location, 0.1F, 1, 50);*/
 
     }
 
