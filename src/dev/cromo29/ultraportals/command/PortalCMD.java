@@ -57,7 +57,7 @@ public class PortalCMD extends DurkCommand {
 
     @Override
     public String getPermission() {
-        return "29Portals.ADM";
+        return "29UltraPortals.*";
     }
 
     @Override
@@ -67,11 +67,6 @@ public class PortalCMD extends DurkCommand {
 
     @Override
     public List<String> getAliases() {
-        return null;
-    }
-
-    @Override
-    public String getDescription() {
         return null;
     }
 

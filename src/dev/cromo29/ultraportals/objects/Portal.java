@@ -47,7 +47,7 @@ public class Portal {
         portalLocation.setDirection(center.getDirection().multiply(-0.1).normalize());
         this.location = portalLocation;
 
-        double tau = 6.283185307179586D / particles;
+        double tau = 6.283185307179586 / particles;
 
         for (int index = 0; index < particles; ++index) {
             double point = index * tau;
@@ -58,8 +58,9 @@ public class Portal {
             VectorUtil.rotateAroundAxisY(vector, Math.toRadians(90));
             clonedLocation.add(vector);
 
-            if (index % 13 == 0 && particlePoints.size() < 4)
+            if (index % 13 == 0 && particlePoints.size() < 4) {
                 this.particlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
+            }
 
             if (index % (particles / 9) == 0) {
                 Location standLoc = new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ());
@@ -98,6 +99,7 @@ public class Portal {
     public void update(boolean enabled) {
         AtomicBoolean hasPlayer = new AtomicBoolean(false);
 
+        // Distância para mostrar o efeito do portal.
         location.getWorld().getNearbyEntities(location, 30, 30, 30).forEach(entity -> {
 
             if (entity.getType() == EntityType.PLAYER) hasPlayer.set(true);
@@ -115,10 +117,12 @@ public class Portal {
             Location loc = circlePoints.get(current);
 
             Vector vector = location.toVector().subtract(loc.toVector());
+
             armorStand.teleport(loc.clone().add(vector.multiply(2.5)).subtract(0.0, 0.5, 0.0));
 
             if (current >= circlePoints.size() - 1) stands.put(armorStand, 0);
             else stands.put(armorStand, current + 1);
+            
         });
 
      /*   particlePoints.forEach(loc -> {

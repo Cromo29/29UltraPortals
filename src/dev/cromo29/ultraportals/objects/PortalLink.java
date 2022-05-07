@@ -128,8 +128,7 @@ public class PortalLink {
         }
 
         if (!destination.getArmorStand().isDead()) {
-            if (!destination.getArmorStand().isCustomNameVisible())
-                destination.getArmorStand().setCustomNameVisible(true);
+            if (!destination.getArmorStand().isCustomNameVisible()) destination.getArmorStand().setCustomNameVisible(true);
 
             destination.getArmorStand().setCustomName(textAnimation.next());
         }

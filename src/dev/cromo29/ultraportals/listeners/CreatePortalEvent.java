@@ -69,6 +69,7 @@ public class CreatePortalEvent implements Listener {
         }
 
         if (portalLink.getOrigin() == null && portalLink.getDestination() == null) {
+
             portalLink.setOrigin(new Portal(location, player.getEyeLocation(), Color.fromRGB(159, 168, 241)));
 
             sendMessage(player, " <b>☾ <7>Você setou a <b>primeira <7>posição do portal!");
@@ -85,6 +86,7 @@ public class CreatePortalEvent implements Listener {
             }
 
             portalLink.setDestination(new Portal(location, player.getEyeLocation(), Color.fromRGB(27, 38, 49)));
+            
             sendMessage(player, " <b>☾ <7>Você setou a <b>segunda <7>posição do portal!");
 
             plugin.getPortalManager().finishPortal(player);
