@@ -1,7 +1,7 @@
 package dev.cromo29.ultraportals.listeners;
 
-import dev.cromo29.durkcore.Util.MakeItem;
-import dev.cromo29.durkcore.Util.TXT;
+import dev.cromo29.durkcore.util.MakeItem;
+import dev.cromo29.durkcore.util.TXT;
 import dev.cromo29.ultraportals.objects.Portal;
 import dev.cromo29.ultraportals.objects.PortalLink;
 import dev.cromo29.ultraportals.UltraPortalsPlugin;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class CreatePortalEvent implements Listener {
 
-    private UltraPortalsPlugin plugin;
+    private final UltraPortalsPlugin plugin;
 
     public CreatePortalEvent(UltraPortalsPlugin plugin) {
         this.plugin = plugin;

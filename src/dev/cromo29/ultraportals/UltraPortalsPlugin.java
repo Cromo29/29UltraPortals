@@ -1,7 +1,7 @@
 package dev.cromo29.ultraportals;
 
-import dev.cromo29.durkcore.API.DurkPlugin;
-import dev.cromo29.durkcore.Util.GsonManager;
+import dev.cromo29.durkcore.api.DurkPlugin;
+import dev.cromo29.durkcore.util.GsonManager;
 import dev.cromo29.ultraportals.command.PortalCMD;
 import dev.cromo29.ultraportals.listeners.CreatePortalEvent;
 import dev.cromo29.ultraportals.listeners.UsePortalEvent;

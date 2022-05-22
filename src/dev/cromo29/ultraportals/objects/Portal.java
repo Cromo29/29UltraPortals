@@ -1,9 +1,9 @@
 package dev.cromo29.ultraportals.objects;
 
-import dev.cromo29.durkcore.SpecificUtils.VectorUtil;
-import dev.cromo29.durkcore.Util.MakeItem;
-import dev.cromo29.durkcore.Util.ParticleEffect;
-import dev.cromo29.durkcore.Util.ParticleMaker;
+import dev.cromo29.durkcore.specificutils.VectorUtil;
+import dev.cromo29.durkcore.util.MakeItem;
+import dev.cromo29.durkcore.util.ParticleEffect;
+import dev.cromo29.durkcore.util.ParticleMaker;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;

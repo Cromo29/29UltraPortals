@@ -1,9 +1,9 @@
 package dev.cromo29.ultraportals.manager;
 
-import dev.cromo29.durkcore.SpecificUtils.LocationUtil;
-import dev.cromo29.durkcore.SpecificUtils.StringUtil;
-import dev.cromo29.durkcore.Util.MakeItem;
-import dev.cromo29.durkcore.Util.TXT;
+import dev.cromo29.durkcore.specificutils.LocationUtil;
+import dev.cromo29.durkcore.specificutils.StringUtil;
+import dev.cromo29.durkcore.util.MakeItem;
+import dev.cromo29.durkcore.util.TXT;
 import dev.cromo29.ultraportals.objects.Portal;
 import dev.cromo29.ultraportals.objects.PortalLink;
 import dev.cromo29.ultraportals.UltraPortalsPlugin;

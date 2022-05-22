@@ -1,13 +1,13 @@
 package dev.cromo29.ultraportals.command;
 
-import dev.cromo29.durkcore.API.DurkCommand;
+import dev.cromo29.durkcore.api.DurkCommand;
 import dev.cromo29.ultraportals.UltraPortalsPlugin;
 
 import java.util.List;
 
 public class PortalCMD extends DurkCommand {
 
-    private UltraPortalsPlugin plugin;
+    private final UltraPortalsPlugin plugin;
 
     public PortalCMD(UltraPortalsPlugin plugin) {
         this.plugin = plugin;

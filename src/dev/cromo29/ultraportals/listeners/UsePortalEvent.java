@@ -1,7 +1,7 @@
 package dev.cromo29.ultraportals.listeners;
 
-import dev.cromo29.durkcore.Util.ParticleEffect;
-import dev.cromo29.durkcore.Util.ParticleMaker;
+import dev.cromo29.durkcore.util.ParticleEffect;
+import dev.cromo29.durkcore.util.ParticleMaker;
 import dev.cromo29.ultraportals.objects.Portal;
 import dev.cromo29.ultraportals.objects.PortalLink;
 import dev.cromo29.ultraportals.UltraPortalsPlugin;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class UsePortalEvent implements Listener {
 
-    private UltraPortalsPlugin plugin;
+    private final UltraPortalsPlugin plugin;
 
     public UsePortalEvent(UltraPortalsPlugin plugin) {
         this.plugin = plugin;
