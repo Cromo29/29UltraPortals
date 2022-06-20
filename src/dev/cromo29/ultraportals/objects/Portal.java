@@ -8,22 +8,17 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.EntityType;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.*;
 
 public class Portal {
 
-    private Location location, direction;
-    private List<Location> circlePoints, particlePoints;
-    private Map<ArmorStand, Integer> stands;
-    private Color color;
+    private final Location location, direction;
+    private final List<Location> circlePoints, particlePoints;
+    private final Map<ArmorStand, Integer> stands;
+    private final Color color;
 
     private ArmorStand armorStand;
 
@@ -58,24 +53,28 @@ public class Portal {
             VectorUtil.rotateAroundAxisY(vector, Math.toRadians(90));
             clonedLocation.add(vector);
 
+            Location currentLocation = new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ());
+
             if (index % 13 == 0 && particlePoints.size() < 4) {
-                this.particlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
-            }
+                this.particlePoints.add(currentLocation);
 
-            if (index % (particles / 9) == 0) {
-                Location standLoc = new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ());
+                ArmorStand armorStand = currentLocation.getWorld().spawn(currentLocation.clone().subtract(0, 0.5, 0), ArmorStand.class);
 
-                ArmorStand armorStand = standLoc.getWorld().spawn(standLoc.clone().subtract(0, 0.5, 0), ArmorStand.class);
+                armorStand.setMarker(true);
                 armorStand.setSmall(true);
                 armorStand.setArms(false);
                 armorStand.setVisible(false);
+                armorStand.setGravity(false);
                 armorStand.setRightArmPose(new EulerAngle(0, 0, Math.toRadians(323)));
-                armorStand.setItemInHand(new MakeItem(Material.WOOL).setData(10).build());
+                armorStand.setItemInHand(new MakeItem(Material.WOOL)
+                        .setData(Objects.equals(color, Color.fromRGB(27, 38, 49)) ? 15 : 10)
+                        .build());
+                armorStand.setCanPickupItems(false);
 
                 stands.put(armorStand, index);
             }
 
-            this.circlePoints.add(new Location(clonedLocation.getWorld(), clonedLocation.getX(), clonedLocation.getY(), clonedLocation.getZ()));
+            this.circlePoints.add(currentLocation);
             clonedLocation.subtract(vector);
         }
     }
@@ -96,42 +95,26 @@ public class Portal {
         return particlePoints;
     }
 
+    public void removeStands() {
+        stands.forEach((armorStand, index) -> armorStand.remove());
+        armorStand.remove();
+    }
+
     public void update(boolean enabled) {
-        AtomicBoolean hasPlayer = new AtomicBoolean(false);
-
-        // Distância para mostrar o efeito do portal.
-        location.getWorld().getNearbyEntities(location, 30, 30, 30).forEach(entity -> {
-
-            if (entity.getType() == EntityType.PLAYER) hasPlayer.set(true);
-        });
-
-        if (!hasPlayer.get()) return;
-
         circlePoints.forEach(loc -> ParticleMaker.sendParticle(ParticleEffect.REDSTONE, loc, enabled ? color : Color.fromRGB(255, 153, 0), 1, true));
 
         if (!enabled) return;
 
-        stands.keySet().forEach(armorStand -> {
+        for (ArmorStand stand : stands.keySet()) {
+            int index = stands.get(stand);
+            Location point = circlePoints.get(index);
 
-            int current = stands.get(armorStand);
-            Location loc = circlePoints.get(current);
+            stand.teleport(point.clone().add(location.toVector().subtract(point.toVector())
+                    .multiply(2.5)).subtract(0.0, 0.5, 0.0));
 
-            Vector vector = location.toVector().subtract(loc.toVector());
-
-            armorStand.teleport(loc.clone().add(vector.multiply(2.5)).subtract(0.0, 0.5, 0.0));
-
-            if (current >= circlePoints.size() - 1) stands.put(armorStand, 0);
-            else stands.put(armorStand, current + 1);
-            
-        });
-
-     /*   particlePoints.forEach(loc -> {
-            Vector vector = location.toVector().subtract(loc.toVector());
-
-            ParticleMaker.sendParticle(ParticleEffect.FIREWORKS_SPARK, loc.clone().add(0, 0.1, 0), vector, 0.1F, 50);
-        });
-
-        ParticleMaker.sendParticle(ParticleEffect.FIREWORKS_SPARK, location, 0.1F, 1, 50);*/
+            if (index >= circlePoints.size() - 1) stands.put(stand, 0);
+             else stands.put(stand, index + 1);
+        }
 
     }
 

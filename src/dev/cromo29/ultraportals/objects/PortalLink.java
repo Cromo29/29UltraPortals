@@ -1,8 +1,8 @@
 package dev.cromo29.ultraportals.objects;
 
-import dev.cromo29.durkcore.SpecificUtils.LocationUtil;
-import dev.cromo29.durkcore.Util.TXT;
-import dev.cromo29.durkcore.Util.TextAnimation;
+import dev.cromo29.durkcore.specificutils.LocationUtil;
+import dev.cromo29.durkcore.util.TXT;
+import dev.cromo29.durkcore.util.TextAnimation;
 import dev.cromo29.ultraportals.UltraPortalsPlugin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -140,8 +140,8 @@ public class PortalLink {
     }
 
     public void removeStand() {
-        if (!origin.getArmorStand().isDead()) origin.getArmorStand().remove();
-        if (!destination.getArmorStand().isDead()) destination.getArmorStand().remove();
+        origin.removeStands();
+        destination.removeStands();
     }
 
 }

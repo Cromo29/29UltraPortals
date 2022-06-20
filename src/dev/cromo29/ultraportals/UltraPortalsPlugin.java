@@ -4,6 +4,7 @@ import dev.cromo29.durkcore.api.DurkPlugin;
 import dev.cromo29.durkcore.util.GsonManager;
 import dev.cromo29.ultraportals.command.PortalCMD;
 import dev.cromo29.ultraportals.listeners.CreatePortalEvent;
+import dev.cromo29.ultraportals.listeners.TickEvent;
 import dev.cromo29.ultraportals.listeners.UsePortalEvent;
 import dev.cromo29.ultraportals.manager.PortalManager;
 import dev.cromo29.ultraportals.objects.PortalLink;
@@ -11,7 +12,6 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class UltraPortalsPlugin extends DurkPlugin {
@@ -21,8 +21,6 @@ public class UltraPortalsPlugin extends DurkPlugin {
 
     private GsonManager portalGson;
     private PortalManager portalManager;
-
-    private int taskID;
 
     @Override
     public void onStart() {
@@ -35,12 +33,10 @@ public class UltraPortalsPlugin extends DurkPlugin {
 
         registerCommand(new PortalCMD(this));
 
-        setListeners(new CreatePortalEvent(this), new UsePortalEvent(this));
+        setListeners(new CreatePortalEvent(this), new UsePortalEvent(this), new TickEvent(this));
 
         portalManager = new PortalManager(this);
         portalManager.loadPortals();
-
-        this.getServer().getScheduler().runTaskLater(this, this::portalsEffect, 30);
     }
 
     @Override
@@ -67,22 +63,8 @@ public class UltraPortalsPlugin extends DurkPlugin {
         return portalGson;
     }
 
-    public int getTaskID() {
-        return taskID;
-    }
-
     public PortalManager getPortalManager() {
         return portalManager;
     }
 
-
-    public void portalsEffect() {
-
-        taskID = this.getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            Iterator<PortalLink> portalLinkIterator = portalsMap.values().iterator();
-
-            portalLinkIterator.forEachRemaining(PortalLink::update);
-
-        }, 0, 5);
-    }
 }

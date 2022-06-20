@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class PortalManager {
 
-    private UltraPortalsPlugin plugin;
+    private final UltraPortalsPlugin plugin;
 
     public PortalManager(UltraPortalsPlugin plugin) {
         this.plugin = plugin;
@@ -116,9 +116,6 @@ public class PortalManager {
         }
 
         player.playSound(player.getLocation(), Sound.SUCCESSFUL_HIT, 1, 1);
-
-        plugin.getServer().getScheduler().cancelTask(plugin.getTaskID());
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> plugin.portalsEffect(), 20);
 
     }
 
